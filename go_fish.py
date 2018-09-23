@@ -53,6 +53,11 @@ class Deck(object):
         for i in range(hand_size):
             hand_cards.append(self.pop_card(i))
         return hand_cards
+    def is_empty(self):
+        if len(self.cards) == 0:
+            return True
+        else:
+            return False
 ###################################################################
 ######################            Hand           #################
 ###################################################################
@@ -94,13 +99,6 @@ class Hand(object):
             i += 1
         return res
 
-
-def is_empty(deck):
-    if len(deck.cards) == 0:
-        return True
-    else:
-        return False
-    
 def game_():
     deck = Deck()
     deck.shuffle()
