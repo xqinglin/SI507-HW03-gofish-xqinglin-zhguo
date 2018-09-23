@@ -1,15 +1,12 @@
 ###Exrea Credit 1 Writing your own class/tests
+import random
 class Card(object):
     suit_names =  ["Diamonds","Clubs","Hearts","Spades"]
     rank_levels = [1,2,3,4,5,6,7,8,9,10,11,12,13]
-    faces = {1:"Ace",11:"Jack",12:"Queen",13:"King"}
 
     def __init__(self, suit=0, rank=2):
         self.suit = self.suit_names[suit]
-        if rank in self.faces: # self.rank handles printed representation
-            self.rank = self.faces[rank]
-        else:
-            self.rank = rank
+        self.rank = rank
         self.rank_num = rank # To handle winning comparison
 
     def __str__(self):
@@ -81,9 +78,37 @@ class Hand(object):
     def draw(self, deck):
         drawCard = deck.pop_card()
         self.cards.append(drawCard)
-def game():
-    deck = Deck()
-    hand_1 = Hand()
-    hand_2 = Hand()
-    for i in range(7):
-        hand_1.draw()
+
+    def count_score(self):
+        score = 0
+        for i in self.cards:
+            score = score + int(i.rank)
+        return score
+
+    def take_away(self, card_number):
+        res = []
+        i = 0
+        while i < len(self.cards):
+            if card_number == self.cards[i].rank:
+                res.append(self.cards.pop(i))
+            i += 1
+
+        return res
+
+
+def is_empty(deck):
+    if len(deck.cards) == 0:
+        return True
+    else:
+        return False
+
+
+
+    correct1 = hand_1.take_away(10)
+    print(correct1)
+    score1 = hand_1.count_score()
+    score2 = hand_2.count_score()
+    print(score1)
+    print(score2)
+
+
