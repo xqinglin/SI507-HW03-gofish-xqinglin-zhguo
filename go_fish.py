@@ -81,9 +81,13 @@ class Hand(object):
     def draw(self, deck):
         drawCard = deck.pop_card()
         self.cards.append(drawCard)
-def game():
+def game_():
     deck = Deck()
     hand_1 = Hand()
     hand_2 = Hand()
-    for i in range(7):
-        hand_1.draw()
+    hand_1.add_card(deck.deal_hand(7))
+    hand_2.add_card(deck.deal_hand(7))
+
+
+game()
+
