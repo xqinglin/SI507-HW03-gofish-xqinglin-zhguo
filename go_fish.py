@@ -1,5 +1,7 @@
 ###Exrea Credit 1 Writing your own class/tests
 import random
+
+
 class Card(object):
     suit_names =  ["Diamonds","Clubs","Hearts","Spades"]
     rank_levels = [1,2,3,4,5,6,7,8,9,10,11,12,13]
@@ -11,6 +13,7 @@ class Card(object):
 
     def __str__(self):
         return "{} of {}".format(self.rank_num,self.suit)
+
 
 class Deck(object):
     def __init__(self): # Don't need any input to create a deck of cards
@@ -53,6 +56,7 @@ class Deck(object):
         for i in range(hand_size):
             hand_cards.append(self.pop_card(i))
         return hand_cards
+
     def is_empty(self):
         if len(self.cards) == 0:
             return True
@@ -64,6 +68,7 @@ class Deck(object):
 class Hand(object):
     def __init__(self, init_cards):
         self.cards = init_cards
+
     def add_card(self, card):
         add = -1
         for i in range(len(self.cards)):
@@ -99,43 +104,60 @@ class Hand(object):
             i += 1
         return res
 
-def game_():
+
+def game():
     deck = Deck()
     deck.shuffle()
     hand_1 = Hand(deck.deal_hand(7))
     hand_2 = Hand(deck.deal_hand(7))
+    print_all_hands(hand_1, hand_2)
     ask_for_cards(deck, hand_1, hand_2)
     score_1 = hand_1.count_score()
     score_2 = hand_2.count_score()
     print (score_1)
     print (score_2)
-    
+
+
+def print_all_hands(hand_1, hand_2):
+    print("++++++++++++++++++")
+    print("Player 1")
+    for card in hand_1.cards:
+        print (card)
+    print("=====================")
+    print("Player 2")
+    for card in hand_2.cards:
+        print (card)
+    print("++++++++++++++++++")
+
 def ask_for_cards(deck, hand_1, hand_2):
     while not deck.is_empty():
         # player 1
-        answer = input("Hello, Player 1! Please choose a card rank you would like to ask the other player if they have (between 1-13):")
+        answer = int(input("Hello, Player 1! Please choose a card rank you would like to ask the other player if they have (between 1-13):"))
         all_matches = hand_2.take_away(answer)
         while len(all_matches) != 0:
             for card in all_matches:
                 hand_1.add_card(card)
-            answer = input("Hello, Player 1! Please choose a card rank you would like to ask the other player if they have (between 1-13):")
+            print_all_hands(hand_1, hand_2)
+            answer = int(input("Hello, Player 1! Please choose a card rank you would like to ask the other player if they have (between 1-13):"))
             all_matches = hand_2.take_away(answer)
         if len(all_matches) == 0:
-            hand_1.draw()
+            hand_1.draw(deck)
             if deck.is_empty():
                 break
         # player 2
-        answer = input("Hello, Player 2! Please choose a card rank you would like to ask the other player if they have (between 1-13):")
+        answer = int(input("Hello, Player 2! Please choose a card rank you would like to ask the other player if they have (between 1-13):"))
         all_matches = hand_1.take_away(answer)
         while len(all_matches) != 0:
             for card in all_matches:
                 hand_2.add_card(card)
-            answer = input("Hello, Player 2! Please choose a card rank you would like to ask the other player if they have (between 1-13):")
+            print_all_hands(hand_1, hand_2)
+            answer = int(input("Hello, Player 2! Please choose a card rank you would like to ask the other player if they have (between 1-13):"))
             all_matches = hand_1.take_away(answer)
         if len(all_matches) == 0:
-            hand_2.draw()
+            hand_2.draw(deck)
             if deck.is_empty():
                 break
+
 
 game()
 
