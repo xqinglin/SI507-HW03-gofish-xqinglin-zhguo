@@ -79,6 +79,7 @@ class Hand(object):
         drawCard = deck.pop_card()
         self.cards.append(drawCard)
 
+
     def count_score(self):
         score = 0
         for i in self.cards:
@@ -111,4 +112,11 @@ def is_empty(deck):
     print(score1)
     print(score2)
 
+    
+def game_():
+    deck = Deck()
+    hand_1 = Hand()
+    hand_2 = Hand()
+    hand_1.add_card(deck.deal_hand(7))
+    hand_2.add_card(deck.deal_hand(7))
 
