@@ -79,7 +79,6 @@ class Hand(object):
         drawCard = deck.pop_card()
         self.cards.append(drawCard)
 
-
     def count_score(self):
         score = 0
         for i in self.cards:
@@ -93,7 +92,6 @@ class Hand(object):
             if card_number == self.cards[i].rank:
                 res.append(self.cards.pop(i))
             i += 1
-
         return res
 
 
@@ -102,21 +100,44 @@ def is_empty(deck):
         return True
     else:
         return False
-
-
-
-    correct1 = hand_1.take_away(10)
-    print(correct1)
-    score1 = hand_1.count_score()
-    score2 = hand_2.count_score()
-    print(score1)
-    print(score2)
-
     
 def game_():
     deck = Deck()
-    hand_1 = Hand()
-    hand_2 = Hand()
-    hand_1.add_card(deck.deal_hand(7))
-    hand_2.add_card(deck.deal_hand(7))
+    deck.shuffle()
+    hand_1 = Hand(deck.deal_hand(7))
+    hand_2 = Hand(deck.deal_hand(7))
+    ask_for_cards(deck, hand_1, hand_2)
+    score_1 = hand_1.count_score()
+    score_2 = hand_2.count_score()
+    print (score_1)
+    print (score_2)
+    
+def ask_for_cards(deck, hand_1, hand_2):
+    while not deck.is_empty():
+        # player 1
+        answer = input("Hello, Player 1! Please choose a card rank you would like to ask the other player if they have (between 1-13):")
+        all_matches = hand_2.take_away(answer)
+        while len(all_matches) != 0:
+            for card in all_matches:
+                hand_1.add_card(card)
+            answer = input("Hello, Player 1! Please choose a card rank you would like to ask the other player if they have (between 1-13):")
+            all_matches = hand_2.take_away(answer)
+        if len(all_matches) == 0:
+            hand_1.draw()
+            if deck.is_empty():
+                break
+        # player 2
+        answer = input("Hello, Player 2! Please choose a card rank you would like to ask the other player if they have (between 1-13):")
+        all_matches = hand_1.take_away(answer)
+        while len(all_matches) != 0:
+            for card in all_matches:
+                hand_2.add_card(card)
+            answer = input("Hello, Player 2! Please choose a card rank you would like to ask the other player if they have (between 1-13):")
+            all_matches = hand_1.take_away(answer)
+        if len(all_matches) == 0:
+            hand_2.draw()
+            if deck.is_empty():
+                break
+
+game()
 
