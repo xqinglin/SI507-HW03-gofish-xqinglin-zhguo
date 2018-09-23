@@ -169,14 +169,14 @@ def game():
     ask_for_cards(deck, hand_1, hand_2)
     score_1 = hand_1.book_num
     score_2 = hand_2.book_num
-    print (score_1)
-    print (score_2)
+    print ("Player 1 score:" + str(score_1))
+    print ("Player 2 score:" + str(score_2))
     if score_1 > score_2:
         print("Player 1 win")
     elif score_1 == score_2:
         print("Draw")
     else:
         print("Player 2 win")
-        
+
 game()
 
