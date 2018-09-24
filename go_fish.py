@@ -68,7 +68,8 @@ class Deck(object):
 class Hand(object):
     def __init__(self, init_cards):
         self.cards = init_cards
-
+        self.books = {}
+        self.books_num = 0
     def add_card(self, card):
         add = -1
         for i in range(len(self.cards)):
@@ -76,6 +77,12 @@ class Hand(object):
                 add = 1
         if add == -1:
             self.cards.append(card)
+            if not self.books.__contains__(card.rank):
+                self.books[card.rank] = 1
+            else:
+                self.books[card.rank] += 1
+                if self.books[card.rank]== 4:
+                    self.book_num += 1
 
     def remove_card(self, card):
         delete = -1
@@ -89,12 +96,6 @@ class Hand(object):
         drawCard = deck.pop_card()
         self.cards.append(drawCard)
 
-    def count_score(self):
-        score = 0
-        for i in self.cards:
-            score = score + int(i.rank)
-        return score
-
     def take_away(self, card_number):
         res = []
         i = 0
@@ -104,18 +105,11 @@ class Hand(object):
             i += 1
         return res
 
-
-def game():
-    deck = Deck()
-    deck.shuffle()
-    hand_1 = Hand(deck.deal_hand(7))
-    hand_2 = Hand(deck.deal_hand(7))
-    print_all_hands(hand_1, hand_2)
-    ask_for_cards(deck, hand_1, hand_2)
-    score_1 = hand_1.count_score()
-    score_2 = hand_2.count_score()
-    print (score_1)
-    print (score_2)
+    def contain(self, card_number):
+        for i in range(len(self.cards)):
+            if card_number == self.cards[i].rank:
+                return True
+        return False
 
 
 def print_all_hands(hand_1, hand_2):
@@ -133,31 +127,56 @@ def ask_for_cards(deck, hand_1, hand_2):
     while not deck.is_empty():
         # player 1
         answer = int(input("Hello, Player 1! Please choose a card rank you would like to ask the other player if they have (between 1-13):"))
+        while not hand_1.contain(answer):
+            answer = int(input("You don't have any card with this rank! Please choose a card rank you would like to ask the other player if they have (between 1-13):"))
         all_matches = hand_2.take_away(answer)
         while len(all_matches) != 0:
             for card in all_matches:
                 hand_1.add_card(card)
             print_all_hands(hand_1, hand_2)
-            answer = int(input("Hello, Player 1! Please choose a card rank you would like to ask the other player if they have (between 1-13):"))
+            answer = int(input("Lucky! Once Again! Please choose a card rank you would like to ask the other player if they have (between 1-13):"))
             all_matches = hand_2.take_away(answer)
         if len(all_matches) == 0:
+            print("draw a card from the deck")
             hand_1.draw(deck)
+            print_all_hands(hand_1, hand_2)
             if deck.is_empty():
                 break
         # player 2
         answer = int(input("Hello, Player 2! Please choose a card rank you would like to ask the other player if they have (between 1-13):"))
+        while not hand_2.contain(answer):
+            answer = int(input("You don't have any card with this rank! Please choose a card rank you would like to ask the other player if they have (between 1-13):"))
         all_matches = hand_1.take_away(answer)
         while len(all_matches) != 0:
             for card in all_matches:
                 hand_2.add_card(card)
             print_all_hands(hand_1, hand_2)
-            answer = int(input("Hello, Player 2! Please choose a card rank you would like to ask the other player if they have (between 1-13):"))
+            answer = int(input("Lucky! Once Again! Please choose a card rank you would like to ask the other player if they have (between 1-13):"))
             all_matches = hand_1.take_away(answer)
         if len(all_matches) == 0:
+            print("draw a card from the deck")
             hand_2.draw(deck)
+            print_all_hands(hand_1, hand_2)
             if deck.is_empty():
                 break
 
+def game():
+    deck = Deck()
+    deck.shuffle()
+    hand_1 = Hand(deck.deal_hand(7))
+    hand_2 = Hand(deck.deal_hand(7))
+    print_all_hands(hand_1, hand_2)
+    ask_for_cards(deck, hand_1, hand_2)
+    score_1 = hand_1.book_num
+    score_2 = hand_2.book_num
+    print ("Player 1 score:" + str(score_1))
+    print ("Player 2 score:" + str(score_2))
+    if score_1 > score_2:
+        print("Player 1 win")
+    elif score_1 == score_2:
+        print("Draw")
+    else:
+        print("Player 2 win")
 
 game()
 
